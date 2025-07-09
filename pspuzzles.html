@@ -1,1 +1,25 @@
-<h2>here lies my motivation</h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Here lies my motivation. (if you are seeing this)</title>
+  </head>
+  <script>
+    fetch('https://pokepast.es/6a9b31a672a1aa9b')
+      .then(response => {
+        // Check if the request was successful (status code in 200-299 range)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        // Parse the response body as JSON
+        return response.json();
+      })
+      .then(data => {
+        // Process the retrieved data
+        console.log(data);
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the fetch operation
+        console.error('Fetch error:', error);
+      });
+  </script>
+</html>
