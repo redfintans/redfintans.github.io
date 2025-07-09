@@ -7,31 +7,15 @@
   <input type="text" id="url" placeholder="Enter Pokepaste URL" size="50" />
   <button onclick="fetchPaste()">Get Paste</button>
   <pre id="output"></pre>
-
   <script>
-    async function fetchPaste() {
-      const url = document.getElementById('url').value;
-
-      try {
-        const proxy = "https://cors-anywhere.herokuapp.com/";
-        const response = await fetch(proxy + url);
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        // Extract all <pre> tags
-        const preTags = doc.querySelectorAll('pre');
-        let output = "";
-
-        preTags.forEach((tag, index) => {
-          output += `--- Block ${index + 1} ---\n` + tag.textContent.trim() + '\n\n';
-        });
-
-        document.getElementById('output').textContent = output.trim();
-      } catch (err) {
-        document.getElementById('output').textContent = "Failed to load paste: " + err;
-      }
-    }
+    const url = "https://yourusername.pythonanywhere.com/api/fetch_pokepaste";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: "https://pokepast.es/abcdef" })
+    });
+    const data = await response.json();
+    document.getElementById("output").innerHTML = data
   </script>
 </body>
 </html>
