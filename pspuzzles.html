@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Here lies my motivation. (if you are seeing this)</title>
-  </head>
+<head>
+  <title>Pokepaste Scraper</title>
+</head>
+<body>
+  <input type="text" id="url" placeholder="Enter Pokepaste URL" size="50" />
+  <button onclick="fetchPaste()">Get Paste</button>
+  <pre id="output"></pre>
+
   <script>
-    fetch('https://pokepast.es/6a9b31a672a1aa9b')
-      .then(response => {
-        // Check if the request was successful (status code in 200-299 range)
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        // Parse the response body as JSON
-        return response.json();
-      })
-      .then(data => {
-        // Process the retrieved data
-        console.log(data);
-      })
-      .catch(error => {
-        // Handle any errors that occurred during the fetch operation
-        console.error('Fetch error:', error);
-      });
+    async function fetchPaste() {
+      const url = document.getElementById('url').value;
+
+      try {
+        const proxy = "https://cors-anywhere.herokuapp.com/";
+        const response = await fetch(proxy + url);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Extract all <pre> tags
+        const preTags = doc.querySelectorAll('pre');
+        let output = "";
+
+        preTags.forEach((tag, index) => {
+          output += `--- Block ${index + 1} ---\n` + tag.textContent.trim() + '\n\n';
+        });
+
+        document.getElementById('output').textContent = output.trim();
+      } catch (err) {
+        document.getElementById('output').textContent = "Failed to load paste: " + err;
+      }
+    }
   </script>
+</body>
 </html>
